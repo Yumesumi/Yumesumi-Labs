@@ -39,6 +39,7 @@ python -m http.server 4173
 
 ## 部署
 
-仓库根目录即为站点根，GitHub Pages 从 `main` 分支根目录发布：
+仓库根目录即为站点根，GitHub Pages 从 `main` 分支根目录发布，绑定自定义域名：
 
-https://yumesumi.github.io/Yumesumi-Labs/
+- https://labs.yumesumi.cyou/
+- 备用地址：https://yumesumi.github.io/Yumesumi-Labs/
