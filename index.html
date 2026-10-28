@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>梦澄实验室 · Mengcheng Lab</title>
+  <meta name="description" content="梦澄实验室 —— 在梦与清醒的交界处，收集微光，做安静而有趣的实验。">
+  <meta name="theme-color" content="#08090c">
+  <meta name="color-scheme" content="dark">
+  <meta property="og:title" content="梦澄实验室 · Mengcheng Lab">
+  <meta property="og:description" content="在梦与清醒的交界处，收集微光，做安静而有趣的实验。">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2308090c'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%23cfe3dd' stroke-opacity='.45' stroke-width='2'/%3E%3Ccircle cx='32' cy='32' r='7' fill='%23d9ece6'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08090c;
+      --ink: #eae7e0;
+      --ink-soft: rgba(230, 232, 226, 0.64);
+      --ink-faint: rgba(230, 232, 226, 0.36);
+      --serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", "SimSun", serif;
+      --sans: "Inter", "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { min-height: 100%; }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--sans);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    ::selection { background: rgba(169, 211, 202, 0.22); color: #fff; }
+
+    /* ---------- atmosphere ---------- */
+
+    .scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(90px);
+      will-change: transform, opacity;
+    }
+
+    .glow-a {
+      width: 64vmax;
+      height: 64vmax;
+      top: -26vmax;
+      left: -20vmax;
+      background: radial-gradient(circle at center, rgba(66, 140, 130, 0.20), rgba(66, 140, 130, 0) 62%);
+      animation: drift-a 36s ease-in-out infinite alternate;
+    }
+
+    .glow-b {
+      width: 56vmax;
+      height: 56vmax;
+      right: -18vmax;
+      bottom: -26vmax;
+      background: radial-gradient(circle at center, rgba(112, 96, 192, 0.17), rgba(112, 96, 192, 0) 62%);
+      animation: drift-b 46s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift-a {
+      from { transform: translate3d(0, 0, 0) scale(1); opacity: 0.8; }
+      to   { transform: translate3d(7vmax, 5vmax, 0) scale(1.08); opacity: 1; }
+    }
+
+    @keyframes drift-b {
+      from { transform: translate3d(0, 0, 0) scale(1.05); opacity: 1; }
+      to   { transform: translate3d(-6vmax, -5vmax, 0) scale(1); opacity: 0.75; }
+    }
+
+    .horizon {
+      position: absolute;
+      left: 50%;
+      top: 70%;
+      width: 175vmax;
+      height: 175vmax;
+      transform: translateX(-50%);
+      border-radius: 50%;
+      border: 1px solid rgba(198, 226, 218, 0.06);
+      background: radial-gradient(circle at 50% 0%, rgba(160, 205, 195, 0.05), transparent 30%);
+    }
+
+    .star {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #d9e9e3;
+      box-shadow: 0 0 8px rgba(217, 233, 227, 0.8);
+      opacity: 0;
+      animation: twinkle 7s ease-in-out infinite;
+    }
+
+    .star-1 { top: 27%; left: 18%; animation-delay: 1s; }
+    .star-2 { top: 21%; right: 23%; width: 2px; height: 2px; animation-delay: 4.2s; }
+    .star-3 { top: 64%; left: 76%; width: 2px; height: 2px; animation-delay: 2.6s; }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 0.55; }
+    }
+
+    .grain {
+      position: absolute;
+      inset: -50%;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+      opacity: 0.035;
+    }
+
+    .cursor-light {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: 52rem;
+      height: 52rem;
+      margin: -26rem 0 0 -26rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(196, 224, 216, 0.075), transparent 62%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1.2s ease;
+    }
+
+    .cursor-light.on { opacity: 1; }
+
+    /* ---------- header ---------- */
+
+    .site-header {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      padding: clamp(1.3rem, 3vw, 2.2rem) clamp(1.4rem, 4vw, 3rem);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 0.74rem;
+      letter-spacing: 0.22em;
+      transition: opacity 0.4s ease;
+    }
+
+    .brand:hover { opacity: 0.75; }
+
+    .brand-mark {
+      width: 20px;
+      height: 20px;
+      color: #cfe2dc;
+      opacity: 0.9;
+    }
+
+    .gh-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--ink-faint);
+      text-decoration: none;
+      font-size: 0.66rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      transition: color 0.4s ease;
+    }
+
+    .gh-link .arrow {
+      font-size: 0.78rem;
+      transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+
+    .gh-link:hover { color: var(--ink); }
+    .gh-link:hover .arrow { transform: translate(2px, -2px); }
+
+    /* ---------- hero ---------- */
+
+    .hero {
+      position: relative;
+      z-index: 2;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem clamp(3rem, 8vh, 6rem);
+      text-align: center;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: 50%;
+      top: 48%;
+      width: min(60rem, 130vw);
+      height: min(34rem, 70vw);
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse at center, rgba(148, 196, 186, 0.12), rgba(148, 196, 186, 0) 62%);
+      filter: blur(50px);
+      animation: breathe 11s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes breathe {
+      0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(0.96); }
+      50%      { opacity: 0.95; transform: translate(-50%, -50%) scale(1.05); }
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: clamp(1.8rem, 4.5vh, 2.8rem);
+      color: #93a8a2;
+      font-size: 0.63rem;
+      letter-spacing: 0.44em;
+      text-transform: uppercase;
+      padding-left: 0.44em;
+    }
+
+    .eyebrow::before,
+    .eyebrow::after {
+      content: "";
+      width: 2.4rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(180, 206, 199, 0.35));
+    }
+
+    .eyebrow::after {
+      background: linear-gradient(90deg, rgba(180, 206, 199, 0.35), transparent);
+    }
+
+    .title {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(2.7rem, 12.5vw, 8rem);
+      line-height: 1.14;
+      letter-spacing: 0.08em;
+      margin-left: 0.08em;
+      color: var(--ink);
+    }
+
+    .title span {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(0.55em);
+      filter: blur(6px);
+      background: linear-gradient(180deg, #f6f3ec 0%, #e2e9e4 58%, #a4bab2 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rise 1.5s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+    }
+
+    .title span:nth-child(1) { animation-delay: 0.15s; }
+    .title span:nth-child(2) { animation-delay: 0.26s; }
+    .title span:nth-child(3) { animation-delay: 0.37s; }
+    .title span:nth-child(4) { animation-delay: 0.48s; }
+    .title span:nth-child(5) { animation-delay: 0.59s; }
+
+    @keyframes rise {
+      to { opacity: 1; transform: translateY(0); filter: blur(0); }
+    }
+
+    @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+      .title span { color: var(--ink); background: none; }
+    }
+
+    .divider {
+      width: 1px;
+      height: clamp(2rem, 5vh, 3rem);
+      margin: clamp(1.4rem, 4vh, 2.4rem) 0;
+      background: linear-gradient(180deg, rgba(200, 220, 214, 0.32), transparent);
+    }
+
+    .tagline {
+      max-width: 36rem;
+      font-size: clamp(0.88rem, 1.5vw, 1rem);
+      font-weight: 300;
+      line-height: 2.1;
+      letter-spacing: 0.16em;
+      color: var(--ink-soft);
+    }
+
+    .tagline-en {
+      margin-top: 0.9rem;
+      font-family: Georgia, "Times New Roman", var(--serif);
+      font-style: italic;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      color: rgba(230, 232, 226, 0.3);
+    }
+
+    /* ---------- footer ---------- */
+
+    .site-footer {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0 clamp(1.4rem, 4vw, 3rem) clamp(1.2rem, 3vw, 2rem);
+      color: var(--ink-faint);
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+    }
+
+    /* ---------- responsive ---------- */
+
+    @media (max-width: 560px) {
+      .eyebrow {
+        gap: 0.7rem;
+        font-size: 0.55rem;
+        letter-spacing: 0.32em;
+        padding-left: 0.32em;
+      }
+
+      .eyebrow::before,
+      .eyebrow::after { width: 1.3rem; }
+
+      .title { letter-spacing: 0.05em; margin-left: 0.05em; }
+
+      .tagline { letter-spacing: 0.1em; font-size: 0.84rem; }
+
+      .site-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.55rem;
+      }
+    }
+
+    @media (pointer: coarse) {
+      .cursor-light { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .glow,
+      .star,
+      .hero::before,
+      .title span {
+        animation: none !important;
+      }
+
+      .title span { opacity: 1; transform: none; filter: none; }
+      .star { opacity: 0.35; }
+      .cursor-light { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene" aria-hidden="true">
+    <div class="glow glow-a"></div>
+    <div class="glow glow-b"></div>
+    <div class="horizon"></div>
+    <span class="star star-1"></span>
+    <span class="star star-2"></span>
+    <span class="star star-3"></span>
+    <div class="cursor-light" id="cursorLight"></div>
+    <div class="grain"></div>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="梦澄实验室 首页">
+      <svg class="brand-mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="8.75" stroke="currentColor" stroke-opacity="0.45" stroke-width="1"/>
+        <circle cx="12" cy="12" r="3" fill="currentColor"/>
+      </svg>
+      <span>梦澄实验室</span>
+    </a>
+    <nav aria-label="站外链接">
+      <a class="gh-link" href="https://github.com/Yumesumi/Yumesumi-Labs" target="_blank" rel="noopener noreferrer">
+        GitHub <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+    </nav>
+  </header>
+
+  <main class="hero">
+    <p class="eyebrow">Mengcheng Laboratory</p>
+    <h1 class="title"><span>梦</span><span>澄</span><span>实</span><span>验</span><span>室</span></h1>
+    <div class="divider" aria-hidden="true"></div>
+    <p class="tagline">在梦与清醒的交界处，收集微光，<br class="break-mobile">做安静而有趣的实验。</p>
+    <p class="tagline-en">A quiet laboratory for curious dreams.</p>
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 梦澄实验室</span>
+    <span>EST. MMXXVI</span>
+  </footer>
+
+  <script>
+    (() => {
+      const light = document.getElementById('cursorLight');
+      const finePointer = window.matchMedia('(pointer: fine)').matches;
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (!light || !finePointer || reduceMotion) return;
+
+      let targetX = window.innerWidth / 2;
+      let targetY = window.innerHeight * 0.4;
+      let x = targetX;
+      let y = targetY;
+
+      window.addEventListener('pointermove', (event) => {
+        targetX = event.clientX;
+        targetY = event.clientY;
+        light.classList.add('on');
+      }, { passive: true });
+
+      const render = () => {
+        x += (targetX - x) * 0.055;
+        y += (targetY - y) * 0.055;
+        light.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        requestAnimationFrame(render);
+      };
+
+      requestAnimationFrame(render);
+    })();
+  </script>
+</body>
+</html>
