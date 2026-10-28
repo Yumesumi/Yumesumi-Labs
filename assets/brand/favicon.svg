@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="梦澄实验室">
+  <rect width="64" height="64" rx="14" fill="#080811"/>
+  <g transform="translate(32 32) scale(0.12) translate(-512 -512)">
+    <path d="M512 327C496.361 421.946 421.945 496.361 327 512C421.945 527.639 496.361 602.055 512 697C527.639 602.055 602.055 527.639 697 512C602.055 496.361 527.639 421.946 512 327Z" fill="#cfc4f5"/>
+  </g>
+  <circle cx="32" cy="32" r="1.6" fill="#080811"/>
+</svg>
